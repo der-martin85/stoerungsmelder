@@ -22,7 +22,8 @@ $payload = [
         "begin" => date_format($begin, 'Y-m-d\TH:i:s.000O'),
         "end" => date_format($end, 'Y-m-d\TH:i:s.000O')
     ],
-    "full" => true
+    "full" => true,
+    "version" => 30
 ];
 
 //open connection
@@ -57,7 +58,7 @@ curl_close($ch);
 
 $res = json_decode($result, true);
 
-//echo var_dump($res);
+echo var_dump($res);
 
 $announcements = $res['announcements'];
 
@@ -66,6 +67,7 @@ $emailbody = "Folgende Störungen wurden auf der Route gefunden:\n";
 foreach ($announcements as $entry) {
     $emailbody .= $entry['summary']."\n";
     $emailbody .= $entry['description']."\n";
+    $emailbody .= "Grund: ".$entry['reason']."\n";
     $emailbody .= "Betrifft Linien:\n";
     foreach ($entry['locations'] as $location) {
         $emailbody .= $location['name']."\n";
