@@ -1,5 +1,7 @@
 {
     "require": {
-        "phpmailer/phpmailer": "^6.0"
+        "phpmailer/phpmailer": "^6.0",
+        "aura/sql": "^2.5",
+        "aura/sqlquery": "^2.7"
     }
 }

@@ -1,6 +1,12 @@
 <?php
 
-include 'getdata.php';
+require_once 'getdata.php';
+require_once 'mysqlconfig.php';
+
+
+use Aura\Sql\ExtendedPdo;
+use Aura\SqlQuery\QueryFactory;
+
 
 function sucheLinien(string $linie):array {
     $lines = getData(ROUTES_FILE, $linie);
@@ -68,16 +74,56 @@ function sucheHaltestellen(string $linienId):array {
     return $ret;
 }
 
-function speicherSuchauftrag(
-    array $wochentage, 
-    int $zeitVonStunde, 
-    int $zeitVonMinuten, 
-    int $zeitBisStunden, 
-    int $zeitBisMinuten, 
-    int $vonHaltestellenId, 
-    int $bisHaltestellenId, 
-    string $user): array 
+/**
+ * @param array $auftrag    associative array containing: name, email, von, bis, wochtentage (array), tolerance 
+ */
+
+function speicherSuchauftrag(array $auftrag, QueryFactory $queryFactory, ExtendedPdo $pdo): array 
 {
+    try {
+        $selectUser = $queryFactory->newSelect();
+        $selectUser
+        ->cols(['id'])
+        ->from('user')
+        ->where('email = :email')
+        ->bindValue('email', $auftrag['email']);
+        if ($result = $pdo->fetchOne($selectUser->getStatement(), $selectUser->getBindValues())) {
+            $userid = $result['id'];
+        } else {
+                
+            $insertUser = $queryFactory->newInsert();
+            $insertUser
+            ->into('user')                   // INTO this table
+            ->cols([                        // bind values as "(col) VALUES (:col)"
+                'name',
+                'email',
+            ])
+            ->bindValue('name', $auftrag['name'])
+            ->bindValue('email', $auftrag['email']);
+            $pdo->perform($insertUser->getStatement(), $insertUser->getBindValues());
+            $name = $insertUser->getLastInsertIdName('id');
+            $userid = $pdo->lastInsertId($name);
+        }
+        
+        $insertAuftrag = $queryFactory->newInsert();
+        $insertAuftrag
+        ->into('auftrag');                   // INTO this table
+        foreach ($auftrag['wochentage'] as $wochentag) {
+            $insertAuftrag->addRow([
+                'user' => $userid,
+                'von' => $auftrag['von'],
+                'bis' => $auftrag['bis'],
+                'wochentag' => $wochentag,
+                'tolerance' => $auftrag['tolerance']
+            ]);
+        }
+        $pdo->perform($insertAuftrag->getStatement(), $insertAuftrag->getBindValues());
+    } catch (PDOException $e) {
+        return [
+            "SUCCESS" => false,
+            "ERR_MESSAGE" => $e->getCode().": ".$e->getMessage()."\n".$e->getTraceAsString()
+        ];
+    }
     
     return ["SUCCESS" => true];
 }
@@ -99,15 +145,18 @@ if (isset($_REQUEST["action"])) {
             }
             break;
         case "speicheSuchauftrag":
-            $wochentage = $_REQUEST['wochentage'];
-            $zeitVonStunde = $_REQUEST['vonStunde'];
-            $zeitVonMinuten = $_REQUEST['vonMinute'];
-            $zeitBisStunden = $_REQUEST['bisStunde'];
-            $zeitBisMinuten = $_REQUEST['bisMinute'];
-            $vonHaltestellenId = $_REQUEST['vonHaltestelle'];
-            $bisHaltestellenId = $_REQUEST['bisHaltestelle'];
-            $user = $_REQUEST['user'];
-            $return = speicherSuchauftrag($wochentage, $zeitVonStunde, $zeitVonMinuten, $zeitBisStunden, $zeitBisMinuten, $vonHaltestellenId, $bisHaltestellenId, $user);
+            //$auftrag = json_decode($_REQUEST['auftrag'], true);
+            $auftrag = [
+                "name" => "Martin",
+                "email" => "martin@martimedia.de",
+                "von" => "06:00:00",
+                "bis" => "09:00:00",
+                "wochentage" => [
+                    1, 2, 3, 4, 5
+                ],
+                "tolerance" => 15
+            ];
+            $return = speicherSuchauftrag($auftrag, $queryFactory, $pdo);
             break;
         default:
             $return = [];
