@@ -152,4 +152,4 @@ function encode_items(&$item, $key)
 array_walk_recursive($return, 'encode_items');
 
 header("Content-type:application/json; charset=utf-8");
-echo json_encode($return, JSON_FORCE_OBJECT);
+echo json_encode($return);
