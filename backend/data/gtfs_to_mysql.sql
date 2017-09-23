@@ -60,7 +60,7 @@ CREATE TABLE `fare_rules` (
 DROP TABLE IF EXISTS routes;
 
 CREATE TABLE `routes` (
-  route_id INT(11) PRIMARY KEY,
+  route_id VARCHAR(20) PRIMARY KEY,
 	agency_id INT(11),
   route_short_name VARCHAR(50),
   route_long_name VARCHAR(255),
@@ -81,10 +81,10 @@ CREATE TABLE `shapes` (
 DROP TABLE IF EXISTS stop_times;
 
 CREATE TABLE `stop_times` (
-  trip_id INT(11),
+  trip_id VARCHAR(20),
   arrival_time VARCHAR(8),
   departure_time VARCHAR(8),
-  stop_id INT(11),
+  stop_id VARCHAR(20),
   stop_sequence INT(11),
   KEY `trip_id` (trip_id),
   KEY `stop_id` (stop_id),
@@ -94,7 +94,7 @@ CREATE TABLE `stop_times` (
 DROP TABLE IF EXISTS stops;
 
 CREATE TABLE `stops` (
-  stop_id INT(11) PRIMARY KEY,
+  stop_id VARCHAR(20) PRIMARY KEY,
 	stop_code VARCHAR(50),
   stop_name VARCHAR(255),
 	stop_desc VARCHAR(255),
@@ -108,9 +108,9 @@ CREATE TABLE `stops` (
 DROP TABLE IF EXISTS trips;
 
 CREATE TABLE `trips` (
-  route_id INT(11),
+  route_id VARCHAR(20),
   service_id INT(11),
-  trip_id INT(11) PRIMARY KEY,
+  trip_id VARCHAR(20) PRIMARY KEY,
   trip_headsign VARCHAR(255),
 	trip_short_name VARCHAR(255),
   direction_id TINYINT(1),
