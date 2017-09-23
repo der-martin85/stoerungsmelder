@@ -1,6 +1,5 @@
 <?php
 
-require_once 'getdata.php';
 require_once 'mysqlconfig.php';
 
 
@@ -8,70 +7,44 @@ use Aura\Sql\ExtendedPdo;
 use Aura\SqlQuery\QueryFactory;
 
 
-function sucheLinien(string $linie):array {
-    $lines = getData(ROUTES_FILE, $linie);
+function sucheLinien(string $linie, QueryFactory $queryFactory, ExtendedPdo $pdo):array {
+    $selectRoutes = $queryFactory->newSelect();
+    $selectRoutes
+    ->cols([
+        'route_id' => 'id',         
+        'CONCAT(route_short_name, " (", route_long_name, ")")' => 'name'
+    ])
+    ->from('routes')
+    ->where('route_short_name LIKE :linie')
+    ->bindValue('linie', "%$linie%");
+    $result = $pdo->fetchAll($selectRoutes->getStatement(), $selectRoutes->getBindValues());
     
-    $ret = [];
-    
-    foreach ($lines as $line) {
-        if (stripos($line['route_short_name'], $linie) !== false) {
-            $info = [
-                "id" => $line['route_id'],
-                "name" => $line['route_short_name']."(".$line['route_long_name'].")"
-            ];
-            array_push($ret, $info);
-        }
-    }
-    unset($lines);
-    
-    return $ret;
+    return $result;
 }
 
-function sucheHaltestellen(string $linienId):array {
-    $trips = getData(TRIPS_FILE, $linienId);
-    $tripIds = [];
+function sucheHaltestellen(int $linienId, QueryFactory $queryFactory, ExtendedPdo $pdo):array {
+    $selectStops = $queryFactory->newSelect();
+    $selectStops
+    ->cols([
+        'stops.stop_id' => 'id',
+        'stops.stop_name' => 'name'
+    ])
+    ->from('trips')
+    ->join(
+        'INNER', 
+        'stop_times',
+        'stop_times.trip_id = trips.trip_id'
+        )
+    ->join(
+        'INNER',
+        'stops',
+        'stops.stop_id = stop_times.stop_id'
+        )
+    ->where('route_id = :linienId')
+    ->bindValue('linienId', $linienId);
+    $result = $pdo->fetchAll($selectStops->getStatement(), $selectStops->getBindValues());
     
-    foreach ($trips as $trip) {
-        if ($trip['route_id'] == $linienId) {
-            $tripIds[] = $trip['trip_id'];
-        }
-    }
-    unset($trips);
-    //echo var_dump($tripIds);
-    $stopIds = [];
-    
-    foreach ($tripIds as $tripId) {
-        $stop_times = getData(STOP_TIME_FILE, $tripId);
-        
-        foreach ($stop_times as $stop_time) {
-            if ($stop_time['trip_id'] == $tripId) {
-                if (!in_array($stop_time['stop_id'], $stopIds)) {
-                    $stopIds[] = $stop_time['stop_id'];
-                }
-            }
-        }
-        unset($stop_times);
-    }
-    
-    $ret = [];
-    
-    $stops = getData(STOPS_FILE);
-    foreach ($stopIds as $stopId) {
-        foreach ($stops as $stop) {
-            if ($stop['stop_id'] == $stopId) {
-                $info = [
-                    "id" => $stop['stop_id'],
-                    "name" => $stop['stop_name']
-                ];
-                if (!in_array($info, $ret)) {
-                    $ret[] = $info;
-                }
-            }
-        }
-    }
-    unset($stops);
-    
-    return $ret;
+    return $result;
 }
 
 /**
@@ -141,12 +114,12 @@ if (isset($_REQUEST["action"])) {
     switch ($_REQUEST["action"]) {
         case "sucheLinien":
             if (isset($_REQUEST['linie'])) {
-                $return = sucheLinien($_REQUEST['linie']);
+                $return = sucheLinien($_REQUEST['linie'], $queryFactory, $pdo);
             }
             break;
         case "sucheHaltestellen":
             if (isset($_REQUEST['linienId'])) {
-                $return = sucheHaltestellen($_REQUEST['linienId']);
+                $return = sucheHaltestellen($_REQUEST['linienId'], $queryFactory, $pdo);
             }
             break;
         case "speicheSuchauftrag":
@@ -172,5 +145,11 @@ if (isset($_REQUEST["action"])) {
             $return = [];
     }
 }
-header("Content-type:application/json");
-echo json_encode($return);
+function encode_items(&$item, $key)
+{
+    $item = utf8_encode($item);
+}
+array_walk_recursive($return, 'encode_items');
+
+header("Content-type:application/json; charset=utf-8");
+echo json_encode($return, JSON_FORCE_OBJECT);
