@@ -115,7 +115,12 @@ function speicherSuchauftrag(array $auftrag, QueryFactory $queryFactory, Extende
                 'von' => $auftrag['von'],
                 'bis' => $auftrag['bis'],
                 'wochentag' => $wochentag,
-                'tolerance' => $auftrag['tolerance']
+                'tolerance' => $auftrag['tolerance'],
+                'warnart' => $auftrag['warnart'],
+                'infozeit' => $auftrag['infozeit'],
+                'startHlt' => $auftrag['startHlt'],
+                'EndHlt' => $auftrag['EndHlt'],
+                'linie' => $auftrag['linie'],
             ]);
         }
         $pdo->perform($insertAuftrag->getStatement(), $insertAuftrag->getBindValues());
@@ -155,8 +160,13 @@ if (isset($_REQUEST["action"])) {
                 "wochentage" => [
                     1, 2, 3, 4, 5
                 ],
-                "tolerance" => 15
-            ];
+                "tolerance" => 15,
+                "warnart" => 0,
+                "infozeit" => "05:30",
+                "startHlt" => "423423",
+                "EndHlt" => "342",
+                "linie" => "324234"
+                ];
             $return = speicherSuchauftrag($auftrag, $queryFactory, $pdo);
             break;
         default:
