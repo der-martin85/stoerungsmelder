@@ -13,6 +13,19 @@ function sucheLinien(string $linie):array {
     
     $ret = [];
     
+    $selectRoutes = $queryFactory->newSelect();
+    $selectUser
+    ->cols([
+        'route_id' => 'id',         
+        'CONCAT(route_short_name, " (", route_long_name, ")")' => 'name'
+    ])
+    ->from('routes')
+    ->where('route_short_name LIKE :linie')
+    ->bindValue('linie', "%$linie");
+    if ($result = $pdo->fetchOne($selectUser->getStatement(), $selectUser->getBindValues())) {
+        $userid = $result['id'];
+    }
+    
     foreach ($lines as $line) {
         if (stripos($line['route_short_name'], $linie) !== false) {
             $info = [
