@@ -16,9 +16,8 @@ function sucheLinien(string $linie):array {
     foreach ($lines as $line) {
         if (stripos($line['route_short_name'], $linie) !== false) {
             $info = [
-                "linienId" => $line['route_id'],
-                "linienName" => $line['route_short_name'],
-                "route" => $line['route_long_name']
+                "id" => $line['route_id'],
+                "name" => $line['route_short_name']."(".$line['route_long_name'].")"
             ];
             array_push($ret, $info);
         }
@@ -61,8 +60,8 @@ function sucheHaltestellen(string $linienId):array {
         foreach ($stops as $stop) {
             if ($stop['stop_id'] == $stopId) {
                 $info = [
-                    "HaltestId" => $stop['stop_id'],
-                    "Name" => $stop['stop_name']
+                    "id" => $stop['stop_id'],
+                    "name" => $stop['stop_name']
                 ];
                 if (!in_array($info, $ret)) {
                     $ret[] = $info;
