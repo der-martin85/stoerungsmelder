@@ -10,8 +10,8 @@ if (isset($_REQUEST['userid'])) {
     $userId = $_REQUEST['userid'];
 }
 
-$userEmail = "martin@martimedia.de";
-$userName = "Martin Ringwelski";
+$userEmail = "example@example.de";
+$userName = "Max Mustermann";
 $lines = [];
 $weekday = date('w');
 
