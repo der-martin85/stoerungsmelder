@@ -130,7 +130,7 @@ function speicherSuchauftrag(array $auftrag, QueryFactory $queryFactory, Extende
 
 $return = [];
 
-echo "<pre>";
+
 
 if (isset($_REQUEST["action"])) {
     switch ($_REQUEST["action"]) {
@@ -162,6 +162,5 @@ if (isset($_REQUEST["action"])) {
             $return = [];
     }
 }
-
+header("Content-type:application/json");
 echo json_encode($return);
-echo "</pre>";
