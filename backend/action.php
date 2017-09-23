@@ -41,7 +41,8 @@ function sucheHaltestellen(int $linienId, QueryFactory $queryFactory, ExtendedPd
         'stops.stop_id = stop_times.stop_id'
         )
     ->where('route_id = :linienId')
-    ->bindValue('linienId', $linienId);
+    ->bindValue('linienId', $linienId)
+    ->groupBy(['stops.stop_id']);
     $result = $pdo->fetchAll($selectStops->getStatement(), $selectStops->getBindValues());
     
     return $result;
