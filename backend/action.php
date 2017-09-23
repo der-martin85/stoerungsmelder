@@ -124,33 +124,28 @@ if (isset($_REQUEST["action"])) {
             }
             break;
         case "speicheSuchauftrag":
-            //$auftrag = json_decode($_REQUEST['auftrag'], true);
-            $auftrag = [
-                "name" => "Martin",
-                "email" => "martin@martimedia.de",
-                "von" => "06:00:00",
-                "bis" => "09:00:00",
-                "wochentage" => [
-                    1, 2, 3, 4, 5
-                ],
-                "tolerance" => 15,
-                "warnart" => 0,
-                "infozeit" => "05:30",
-                "startHlt" => "423423",
-                "EndHlt" => "342",
-                "linie" => "324234"
-                ];
+            $auftrag = json_decode($_REQUEST['auftrag'], true);
+//             $auftrag = [
+//                 "name" => "Martin",
+//                 "email" => "martin@martimedia.de",
+//                 "von" => "06:00:00",
+//                 "bis" => "09:00:00",
+//                 "wochentage" => [
+//                     1, 2, 3, 4, 5
+//                 ],
+//                 "tolerance" => 15,
+//                 "warnart" => 0,
+//                 "infozeit" => "05:30",
+//                 "startHlt" => "423423",
+//                 "EndHlt" => "342",
+//                 "linie" => "324234"
+//                 ];
             $return = speicherSuchauftrag($auftrag, $queryFactory, $pdo);
             break;
         default:
             $return = [];
     }
 }
-function encode_items(&$item, $key)
-{
-    $item = utf8_encode($item);
-}
-array_walk_recursive($return, 'encode_items');
 
 header("Content-type:application/json; charset=utf-8");
 echo json_encode($return);

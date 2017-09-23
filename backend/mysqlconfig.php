@@ -10,7 +10,7 @@ const DB_PASSWORD = "UvlDecxvQ35MCKg1";
 const DB_NAME = "stoerungsmelder";
 
 $pdo = new ExtendedPdo(
-    'mysql:host=localhost;dbname='.DB_NAME,
+    'mysql:host=localhost;charset=utf8;dbname='.DB_NAME,
     DB_USERNAME,
     DB_PASSWORD
     );
