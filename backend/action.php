@@ -1,6 +1,5 @@
 <?php
 
-require_once 'getdata.php';
 require_once 'mysqlconfig.php';
 
 
