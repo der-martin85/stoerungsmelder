@@ -83,7 +83,21 @@ function speicherSuchauftrag(array $auftrag, QueryFactory $queryFactory, Extende
             $name = $insertUser->getLastInsertIdName('id');
             $userid = $pdo->lastInsertId($name);
         }
-        
+    } catch (PDOException $e) {
+        return [
+            "SUCCESS" => false,
+            "ERR_MESSAGE" => $e->getCode().": ".$e->getMessage()."\n".$e->getTraceAsString()
+        ];
+    }
+    
+    if (!isset($userid)) {
+        return [
+            "SUCCESS" => false,
+            "ERR_MESSAGE" => $e->getCode().": ".$e->getMessage()."\n".$e->getTraceAsString()
+        ];
+    }
+    
+    try {
         $insertAuftrag = $queryFactory->newInsert();
         $insertAuftrag
         ->into('auftrag');                   // INTO this table
