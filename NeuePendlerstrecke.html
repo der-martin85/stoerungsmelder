@@ -13,6 +13,7 @@
 
     <!-- Custom styles for this template -->
     <link href="starter-template.css" rel="stylesheet">
+        <link href="css/typeaheadjs.css" rel="stylesheet">
   </head>
 
   <body>
@@ -46,7 +47,7 @@
     <div class="form-group row">
       <label for="inputLinie" class="col-sm-2 col-form-label">Linie</label>
       <div class="col-sm-10">
-        <input type="string" class="form-control" id="inputLinie" placeholder="z.B. U1">
+        <input type="string" class="form-control" id="linie" placeholder="z.B. U1">
       </div>
     </div>
     <div class="form-group row">
@@ -108,17 +109,9 @@
 	</div>
       </div>
     </div>
-    <div class="form-group row">
-      <div class="offset-sm-2 col-sm-10">
-        <button type="submit" class="btn btn-primary">Strecke speichern</button>
-      </div>
-    </div>
-  </form>
-</div>
-
-    <div class="form-group">
+        <div class="form-group">
       <div class="form-group row">
-	<label for="exampleSelect2" class="col-sm-2 col-form-label">Wann soll eine Warnung geschickt werden</label>
+	<label for="exampleSelect2" class="col-sm-2 col-form-label">Warnung</label>
 	<div class="col-sm-10">
 	  <select class="form-control" id="exampleSelect2" size="1">
 	    <option>ab 5 Minuten Verzögerung</option>
@@ -129,12 +122,57 @@
 	</div>
       </div>
     </div>
+        <div class="form-group">
+      <div class="form-group row">
+	<label for="exampleSelect2" class="col-sm-2 col-form-label">Warnart</label>
+	<div class="col-sm-10">
+	  <select class="form-control" id="exampleSelect2" size="1">
+	    <option>E-Mail</option>
+	    <option>SMS</option>
+	    <option>WhatsApp</option>
+	    <option>Philipps Hue</option>
+	    <option>Anrodid Smarphone Wecker</option>
+	  </select>
+	</div>
+      </div>
+    </div>
+
+	        <div class="form-group">
+      <div class="form-group row">
+	<label for="exampleSelect2" class="col-sm-2 col-form-label">Informatiomszeit</label>
+	<div class="col-sm-10">
+	  <select class="form-control" id="exampleSelect2" size="1">
+	    <option>Sobald bekannt</option>
+	    <option>2 Tage vorher</option>
+	    <option>1 Tag vorher</option>
+	    <option>2h vorher</option>
+	    <option>1h vorher</option>
+	    <option>30min vorher</option>
+	    <option>20min vorher</option>
+	    <option>10min vorher</option>
+	    <option>erst bei Abfahrt des Zuges</option>
+	  </select>
+	</div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="offset-sm-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Strecke speichern</button>
+      </div>
+    </div>
+  </form>
+</div>
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-     <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+        <script src="js/bootstrap3-typeahead.min.js"></script>
+<!--    <script src="js/typeahead.bundle.min.js"></script> -->
+    <script src="js/pendelstrecke.js"></script>
     </body>
 </html>
