@@ -139,3 +139,9 @@ LOAD DATA LOCAL INFILE 'stop_times.txt' INTO TABLE stop_times FIELDS TERMINATED 
 LOAD DATA LOCAL INFILE 'stops.txt' INTO TABLE stops FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' IGNORE 1 LINES;
 
 LOAD DATA LOCAL INFILE 'trips.txt' INTO TABLE trips FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' IGNORE 1 LINES;
+
+
+UPDATE routes SET route_long_name = REPLACE(route_long_name,"%AB","A-") ;
+UPDATE routes SET route_long_name = REPLACE(route_long_name,"%UB","U-") ;
+UPDATE routes SET route_long_name = REPLACE(route_long_name,"%SB","S-") ;
+UPDATE routes SET route_long_name = REPLACE(route_long_name,"%RE","RE-") ;
