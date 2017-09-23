@@ -8,36 +8,21 @@ use Aura\Sql\ExtendedPdo;
 use Aura\SqlQuery\QueryFactory;
 
 
-function sucheLinien(string $linie):array {
+function sucheLinien(string $linie, QueryFactory $queryFactory, ExtendedPdo $pdo):array {
     $lines = getData(ROUTES_FILE, $linie);
     
-    $ret = [];
-    
     $selectRoutes = $queryFactory->newSelect();
-    $selectUser
+    $selectRoutes
     ->cols([
         'route_id' => 'id',         
         'CONCAT(route_short_name, " (", route_long_name, ")")' => 'name'
     ])
     ->from('routes')
     ->where('route_short_name LIKE :linie')
-    ->bindValue('linie', "%$linie");
-    if ($result = $pdo->fetchOne($selectUser->getStatement(), $selectUser->getBindValues())) {
-        $userid = $result['id'];
-    }
+    ->bindValue('linie', "%$linie%");
+    $result = $pdo->fetchAll($selectRoutes->getStatement(), $selectRoutes->getBindValues());
     
-    foreach ($lines as $line) {
-        if (stripos($line['route_short_name'], $linie) !== false) {
-            $info = [
-                "id" => $line['route_id'],
-                "name" => $line['route_short_name']."(".$line['route_long_name'].")"
-            ];
-            array_push($ret, $info);
-        }
-    }
-    unset($lines);
-    
-    return $ret;
+    return $result;
 }
 
 function sucheHaltestellen(string $linienId):array {
@@ -154,7 +139,7 @@ if (isset($_REQUEST["action"])) {
     switch ($_REQUEST["action"]) {
         case "sucheLinien":
             if (isset($_REQUEST['linie'])) {
-                $return = sucheLinien($_REQUEST['linie']);
+                $return = sucheLinien($_REQUEST['linie'], $queryFactory, $pdo);
             }
             break;
         case "sucheHaltestellen":
@@ -185,5 +170,11 @@ if (isset($_REQUEST["action"])) {
             $return = [];
     }
 }
-header("Content-type:application/json");
-echo json_encode($return);
+function encode_items(&$item, $key)
+{
+    $item = utf8_encode($item);
+}
+array_walk_recursive($return, 'encode_items');
+
+header("Content-type:application/json; charset=utf-8");
+echo json_encode($return, JSON_FORCE_OBJECT);
