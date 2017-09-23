@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 23. Sep 2017 um 00:37
+-- Erstellungszeit: 23. Sep 2017 um 08:32
 -- Server-Version: 5.7.19-0ubuntu0.17.04.1
 -- PHP-Version: 7.0.22-0ubuntu0.17.04.1
 
@@ -34,7 +34,12 @@ CREATE TABLE `auftrag` (
   `von` time NOT NULL,
   `bis` time NOT NULL,
   `wochentag` int(11) NOT NULL,
-  `tolerance` int(11) NOT NULL
+  `tolerance` int(11) NOT NULL,
+  `warnart` int(11) NOT NULL,
+  `infozeit` time NOT NULL,
+  `startHlt` varchar(100) NOT NULL,
+  `EndHlt` varchar(100) NOT NULL,
+  `linie` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -74,12 +79,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `auftrag`
 --
 ALTER TABLE `auftrag`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

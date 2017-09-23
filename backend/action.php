@@ -16,8 +16,8 @@ function sucheLinien(string $linie):array {
     foreach ($lines as $line) {
         if (stripos($line['route_short_name'], $linie) !== false) {
             $info = [
-                "linienId" => $line['route_id'],
-                "linienName" => $line['route_short_name']." (".$line['route_long_name'].")"
+                "id" => $line['route_id'],
+                "name" => $line['route_short_name']."(".$line['route_long_name'].")"
             ];
             array_push($ret, $info);
         }
@@ -55,21 +55,21 @@ function sucheHaltestellen(string $linienId):array {
     
     $ret = [];
     
+    $stops = getData(STOPS_FILE);
     foreach ($stopIds as $stopId) {
-        $stops = getData(STOPS_FILE, $stopId);
         foreach ($stops as $stop) {
             if ($stop['stop_id'] == $stopId) {
                 $info = [
-                    "HaltestId" => $stop['stop_id'],
-                    "Name" => $stop['stop_name']
+                    "id" => $stop['stop_id'],
+                    "name" => $stop['stop_name']
                 ];
                 if (!in_array($info, $ret)) {
                     $ret[] = $info;
                 }
             }
         }
-        unset($stops);
     }
+    unset($stops);
     
     return $ret;
 }
@@ -114,7 +114,12 @@ function speicherSuchauftrag(array $auftrag, QueryFactory $queryFactory, Extende
                 'von' => $auftrag['von'],
                 'bis' => $auftrag['bis'],
                 'wochentag' => $wochentag,
-                'tolerance' => $auftrag['tolerance']
+                'tolerance' => $auftrag['tolerance'],
+                'warnart' => $auftrag['warnart'],
+                'infozeit' => $auftrag['infozeit'],
+                'startHlt' => $auftrag['startHlt'],
+                'EndHlt' => $auftrag['EndHlt'],
+                'linie' => $auftrag['linie'],
             ]);
         }
         $pdo->perform($insertAuftrag->getStatement(), $insertAuftrag->getBindValues());
@@ -154,8 +159,13 @@ if (isset($_REQUEST["action"])) {
                 "wochentage" => [
                     1, 2, 3, 4, 5
                 ],
-                "tolerance" => 15
-            ];
+                "tolerance" => 15,
+                "warnart" => 0,
+                "infozeit" => "05:30",
+                "startHlt" => "423423",
+                "EndHlt" => "342",
+                "linie" => "324234"
+                ];
             $return = speicherSuchauftrag($auftrag, $queryFactory, $pdo);
             break;
         default:

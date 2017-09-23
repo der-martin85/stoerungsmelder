@@ -5,22 +5,21 @@ const TRIPS_FILE = './data/trips.txt';
 const STOP_TIME_FILE = './data/stop_times.txt';
 const STOPS_FILE = './data/stops.txt';
 
-function getData(string $file, string $filter):array {
-    $csv = shell_exec("head -n 1 $file && grep '$filter' $file");
+function getData(string $file, string $filter = ""):array {
+    $header = str_getcsv(shell_exec("head -n 1 $file"), ',');
+    if ($filter != "") {
+        $csv = shell_exec("grep '$filter' $file");
+    } else {
+        $csv = shell_exec("tail -n+2 $file");
+    }
         
     $array = str_getcsv($csv, "\n");
         
     $mapArray = [];
-    
-    foreach($array as $Row) $mapArray[] = str_getcsv($Row, ',');
         
-    $header = array_shift($mapArray);
-        
-    array_walk($mapArray, '_combine_array', $header);
+    foreach($array as $Row) {
+        $mapArray[] = array_combine($header, str_getcsv($Row, ','));
+    }
     
     return $mapArray;
-}
-
-function _combine_array(&$row, $key, $header) {
-    $row = array_combine($header, $row);
 }
