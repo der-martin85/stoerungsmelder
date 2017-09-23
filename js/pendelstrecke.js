@@ -3,13 +3,10 @@ function fillStation($ele, data) {
     $.each(data, function (idx, ele) {
 	$ele.append($('<option>').attr('value',ele.id).text(ele.name));
     });
-    $ele.append($('<option>').attr('value',18).text('Du'));
 }
 
 function fillStationById(id) {
-    // backend/action.php?action=sucheHaltestellen&linienId=1292
     $.get('backend/action.php?action=sucheHaltestellen&linienId='+id, function (data) {
-//$.get('JSON.json', function (data) {
 	fillStation($('#startHalt'),data);
 	fillStation($('#stopHalt'),data);
     });
@@ -44,3 +41,20 @@ $('#zeitBis').timepicker({
     showMeridian: false,
     defaultTime: false
 });
+$('#btnSave').click(function (event) {
+    event.preventDefault();
+    console.log('CLICK');
+    console.log(linienId);
+    console.log($('#zeitVon').val());
+    console.log($('#zeitBis').val());
+    var days = [];
+    $('#weekdays :checked').each(function() {
+	days.push($(this).attr('val'));
+    });
+    console.log(days)
+    console.log($('#startHalt').val());
+    console.log($('#stopHalt').val());
+    console.log($('#warnung').val());
+    console.log($('#warnart').val());
+    console.log($('#warnzeit').val());
+})

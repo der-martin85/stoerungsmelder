@@ -50,51 +50,51 @@
     <div class="form-group row">
       <label for="inputLinie" class="col-sm-2 col-form-label">Linie</label>
       <div class="col-sm-10">
-        <input type="string" class="form-control" id="linie" placeholder="z.B. U1">
+        <input type="string" class="form-control" id="linie" placeholder="z.B. U1 oder 120">
       </div>
     </div>
     <div class="form-group row">
       <label class="col-sm-2">Wochentage</label>
       <div class="col-sm-10">
-        <div class="form-check">
+        <div class="form-check" id="weekdays">
           <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" checked="1"> Montag
+            <input class="form-check-input" type="checkbox" val="1" checked="1"> Montag
           </label>
           <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" checked="1"> Dienstag
+            <input class="form-check-input" type="checkbox" val="2" checked="1"> Dienstag
           </label>
           <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" checked="1"> Mittwoch
+            <input class="form-check-input" type="checkbox" val="3" checked="1"> Mittwoch
           </label>
           <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" checked="1"> Donnerstag
+            <input class="form-check-input" type="checkbox" val="4" checked="1"> Donnerstag
           </label>
           <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" checked="1"> Freitag
+            <input class="form-check-input" type="checkbox" val="5" checked="1"> Freitag
           </label>
           <label class="form-check-label">
-            <input class="form-check-input" type="checkbox"> Samstag
+            <input class="form-check-input" type="checkbox" val="6"> Samstag
           </label>
           <label class="form-check-label">
-            <input class="form-check-input" type="checkbox"> Sonntag
+            <input class="form-check-input" type="checkbox" val="0"> Sonntag
           </label>
         </div>
       </div>
     </div>
     <div class="form-group row">
-      <label for="inputLinienSearch" class="col-sm-2 col-form-label">Zeit von</label>
+      <label for="zeitVon" class="col-sm-2 col-form-label">Abfahrt ab</label>
             <div class="col-sm-3">
 	      <div class="input-group bootstrap-timepicker timepicker">
-		<input id="zeitVon" type="text" class="form-control input-small">
+		<input id="zeitVon" type="text" class="form-control input-small" value="7:00">
 		<span class="input-group-addon">
 		  <i class="fa fa-clock-o" aria-hidden="true"></i>
 		</span>
 	      </div>
 	    </div>
-      <label for="inputLinienSearch" class="col-sm-2 col-form-label">bis</label>
+      <label for="zeitBis" class="col-sm-2 col-form-label">Ankunft bis</label>
             <div class="col-sm-3">
 	      <div class="input-group bootstrap-timepicker timepicker">
-		<input id="zeitBis" type="text" class="form-control input-small">
+		<input id="zeitBis" type="text" class="form-control input-small" value="10:00">
 		<span class="input-group-addon">
 		  <i class="fa fa-clock-o" aria-hidden="true"></i>
 		</span>
@@ -114,7 +114,7 @@
 
     <div class="form-group">
       <div class="form-group row">
-	<label for="exampleSelect2" class="col-sm-2 col-form-label">Zielhaltestelle</label>
+	<label for="stopHalt" class="col-sm-2 col-form-label">Zielhaltestelle</label>
 	<div class="col-sm-10">
 	  <select class="form-control" id="stopHalt" size="1">
 	    <option>Bitte wählen Sie zuerst die Linie</option>
@@ -124,27 +124,28 @@
     </div>
         <div class="form-group">
       <div class="form-group row">
-	<label for="exampleSelect2" class="col-sm-2 col-form-label">Warnung</label>
+	<label for="warnung" class="col-sm-2 col-form-label">Warnung</label>
 	<div class="col-sm-10">
-	  <select class="form-control" id="exampleSelect2" size="1">
-	    <option>ab 5 Minuten Verzögerung</option>
-	    <option>ab 10 Minuten Verzögerung</option>
-	    <option>ab 15 Minuten Verzögerung</option>
-	    <option>nur bei Liniensperrungen mit Ersatzverkehr</option>
+	  <select class="form-control" id="warnung" size="1">
+	    <option value="5">ab 5 Minuten Verzögerung</option>
+	    <option value="10">ab 10 Minuten Verzögerung</option>
+	    <option value="15">ab 15 Minuten Verzögerung</option>
+	    <option value="0">nur bei Liniensperrungen mit Ersatzverkehr</option>
 	  </select>
 	</div>
       </div>
     </div>
         <div class="form-group">
       <div class="form-group row">
-	<label for="exampleSelect2" class="col-sm-2 col-form-label">Warnart</label>
+	<label for="warnart" class="col-sm-2 col-form-label">Warnart</label>
 	<div class="col-sm-10">
-	  <select class="form-control" id="exampleSelect2" size="1">
-	    <option>E-Mail</option>
-	    <option>SMS</option>
-	    <option>WhatsApp</option>
-	    <option>Philipps Hue</option>
-	    <option>Anrodid Smarphone Wecker</option>
+	  <select class="form-control" id="warnart" size="1">
+	    <option value="0">E-Mail</option>
+	    <option value="1">SMS</option>
+	    <option value="2">WhatsApp</option>
+	    <option value="3">Philipps Hue</option>
+	    <option value="4">Anrodid Smarphone Wecker-App</option>
+	    <option value="5">Apple Smarphone Wecker-App</option>
 	  </select>
 	</div>
       </div>
@@ -152,18 +153,18 @@
 
 	        <div class="form-group">
       <div class="form-group row">
-	<label for="exampleSelect2" class="col-sm-2 col-form-label">Informatiomszeit</label>
+	<label for="warnzeit" class="col-sm-2 col-form-label">Warnzeit</label>
 	<div class="col-sm-10">
-	  <select class="form-control" id="exampleSelect2" size="1">
-	    <option>Sobald bekannt</option>
-	    <option>2 Tage vorher</option>
-	    <option>1 Tag vorher</option>
-	    <option>2h vorher</option>
-	    <option>1h vorher</option>
-	    <option>30min vorher</option>
-	    <option>20min vorher</option>
-	    <option>10min vorher</option>
-	    <option>erst bei Abfahrt des Zuges</option>
+	  <select class="form-control" id="warnzeit" size="1">
+	    <option value="0">Sobald bekannt</option>
+	    <option value="1">2 Tage vor Abfahrt</option>
+	    <option value="2">1 Tag vor Abfahrt</option>
+	    <option value="3">2h vor Abfahrt</option>
+	    <option value="4">1h vor Abfahrt</option>
+	    <option value="5">30min vor Abfahrt</option>
+	    <option value="6">20min vor Abfahrt</option>
+	    <option value="7">10min vor Abfahrt</option>
+	    <option value="8">erst bei Abfahrt</option>
 	  </select>
 	</div>
       </div>
@@ -171,7 +172,7 @@
 
     <div class="form-group row">
       <div class="offset-sm-2 col-sm-10">
-        <button type="submit" class="btn btn-primary">Strecke speichern</button>
+        <button type="submit" id="btnSave" class="btn btn-primary">Strecke speichern</button>
       </div>
     </div>
   </form>
