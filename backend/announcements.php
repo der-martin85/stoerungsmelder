@@ -118,20 +118,49 @@ $res = json_decode($result, true);
 
 //echo var_dump($res);
 
+$reasons = [
+    'UNDEFINED_PROBLEM' => 'Unbekannt',
+    'ROADWORKS' => 'Straßenbauarbeiten',
+    'CONGESTION' => 'Stau',
+    'SPECIAL_EVENT' => 'Großveranstaltung',
+    'SLIPPERINESS' => 'Rutschgefahr',
+    'POLICE_REQUEST' => 'Polizeieinsatz',
+    'FIRE_BRIGADE_SAFETY_CHECKS' => 'Feuerwehreinsatz',
+    'STATION_OVERRUN' => 'Stationsüberfüllung',
+    'SERVICE_FAILURE' => 'Technisches Versagen',
+    'ROAD_CLOSED' => 'Straßensperrung',
+    'VEHICLE_ON_THE_LINE' => 'Liegengebliebenes Fahrzeug',
+    'ACCIDENT' => 'Unfall',
+    'DEMONSTRATION' => 'Demonstration',
+    'STAFF_ABSENCE' => 'Personalmangel',
+    'BOMB_ALERT' => 'Bombenalarm',
+    'LOW_WATER_LEVEL' => 'Niedriger Wasserstand',
+    'ROUTE_BLOCKAGE' => 'Blockierte Route',
+    'ROUGH_SEA' => 'Raue See' 
+];
+
 if (isset($res['announcements'])) {
     
     $announcements = $res['announcements'];
     
-    $emailbody = "Folgende Störungen wurden auf der Route gefunden:\n";
+    $emailbody = "Folgende Störungen wurden auf deiner heutigen Route gefunden:\n\n";
     
     foreach ($announcements as $entry) {
-        $emailbody .= $entry['summary']."\n";
-        $emailbody .= $entry['description']."\n";
-        $emailbody .= "Grund: ".$entry['reason']."\n";
-        $emailbody .= "Betrifft Linien:\n";
+        $emailbody .= "Linien: ";
+        $firstline = true;
         foreach ($entry['locations'] as $location) {
-            $emailbody .= $location['line']['name']."\n";
+            if ($firstline) {
+                $firstline = false;
+            } else {
+                $emailbody .= ", ";
+            }
+            $emailbody .= $location['line']['name'];
         }
+        $emailbody .= "\n";
+        $emailbody .= "Grund: ".$reasons[$entry['reason']]."\n";
+        //$emailbody .= $entry['summary']."\n";
+        $emailbody .= $entry['description']."\n";
+        
     }
     
     echo $emailbody;
