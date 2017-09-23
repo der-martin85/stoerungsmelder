@@ -25,8 +25,9 @@ function sucheLinien(string $linie, QueryFactory $queryFactory, ExtendedPdo $pdo
 function sucheHaltestellen(string $linienId, QueryFactory $queryFactory, ExtendedPdo $pdo):array {
     $selectStops = $queryFactory->newSelect();
     $selectStops
+    ->distinct()
     ->cols([
-        'stops.stop_id' => 'id',
+        'stops.parent_station' => 'id',
         'stops.stop_name' => 'name'
     ])
     ->from('trips')
@@ -42,8 +43,11 @@ function sucheHaltestellen(string $linienId, QueryFactory $queryFactory, Extende
         )
     ->where('route_id = :linienId')
     ->bindValue('linienId', $linienId)
-    ->orderBy(['stops.stop_name'])
-    ->groupBy(['stops.stop_id']);
+    ->orderBy([
+        'stops.stop_name'  
+    ])
+    ->groupBy([
+        'stops.stop_id']);
     $result = $pdo->fetchAll($selectStops->getStatement(), $selectStops->getBindValues());
     
     return $result;

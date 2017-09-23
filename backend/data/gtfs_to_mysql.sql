@@ -101,6 +101,7 @@ CREATE TABLE `stops` (
   stop_lat DECIMAL(9,6),
   stop_lon DECIMAL(9,6),
 	location_type INT(11),
+	parent_station VARCHAR(20),
   KEY `stop_lat` (stop_lat),
   KEY `stop_lon` (stop_lon)
 );
