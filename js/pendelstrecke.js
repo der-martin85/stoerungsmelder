@@ -57,4 +57,24 @@ $('#btnSave').click(function (event) {
     console.log($('#warnung').val());
     console.log($('#warnart').val());
     console.log($('#warnzeit').val());
+    data = {
+        "name":  "Martin",
+        "email": "martin@martimedia.de",
+        "von": $('#zeitVon').val()+":00",
+        "bis": $('#zeitBis').val()+":00",
+        "wochentage" : days,
+        "tolerance" : $('#warnung').val() ,
+        "warnart": $('#warnart').val(),
+	"infozeit" : $('#warnart').val(),
+        "startHlt" : $('#startHalt').val() ,
+        "EndHlt": $('#stopHalt').val(),
+        "linie" : linienId,
+    };
+    data= {
+	'auftrag': JSON.stringify(data),
+    };
+    $.post('backend/action.php?action=speicheSuchauftrag', data, function (data) {
+	window.open("strecken.php?succes="+data.SUCESS,"_self");
+    });
+    
 })
